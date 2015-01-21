@@ -6,6 +6,7 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var wiredep = require('wiredep').stream;
+var webserver = require('gulp-webserver');
 
 // lint
 gulp.task('lint', function() {
@@ -39,9 +40,18 @@ gulp.task('bower-install', function() {
     .pipe(gulp.dest('./client'));
 });
 
+// start webserver (not api)
+gulp.task('webserver', function() {
+  gulp.src('./client')
+    .pipe(webserver({
+      lifereload: true,
+      open: true
+    }));
+});
+
 // watch for changes
 gulp.task('watch', function() {
   gulp.watch(['client/app/*.js', 'client/app/**/*.js'], ['lint', 'scripts']);
 });
 
-gulp.task('default', ['lint', 'scripts', 'bower-install', 'sass', 'watch']);
+gulp.task('default', ['lint', 'scripts', 'bower-install', 'sass', 'webserver', 'watch']);
