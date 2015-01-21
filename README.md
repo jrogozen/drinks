@@ -4,6 +4,10 @@ Randomize party games with friends and drinks!
 ## To Do
 Let's set up the Angular frontend first with mock data stored in Arrays/Objects. We'll translate it later to pull data from Node server.
 
+### Task Manager
+- Jon: Activity Factory, Drink Factory (test!)
+- Parag: User Factory, User Controller (test!)
+
 ### Server
 
 ### Client
