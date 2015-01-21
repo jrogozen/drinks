@@ -9,15 +9,14 @@
 <body ng-app="drink">
   <div ui-view=""></div>
 
-  <!-- script dependencies -->
-  <script src="bower_components/angular/angular.min.js"></script>
-  <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
-  <script src="bower_components/jquery/dist/jquery.min.js"></script>
-  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
-  <!-- figure out how to grunt/gulp concat everything -->
-  <script src="app/app.js"></script>
-  <script src="app/main/main.js"></script>
-  <script src="app/main/main.controller.js"></script>
+  <!-- bower:js -->
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+  <!-- endbower -->
+
+  <script src="dist/all.min.js"></script>
 </body>
 </html>

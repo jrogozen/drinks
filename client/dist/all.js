@@ -8,3 +8,14 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpP
 
   $locationProvider.html5Mode(true);
 }]);
+app.controller('mainCtrl', ['$scope', function($scope) {
+
+}]);
+app.config(['$stateProvider', function($stateProvider) {
+  $stateProvider
+    .state('main', {
+      url: '/',
+      templateUrl: 'app/main/main.html',
+      controller: 'mainCtrl'
+    });
+}]);
