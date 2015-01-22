@@ -6,7 +6,7 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var wiredep = require('wiredep').stream;
-var webserver = require('gulp-webserver');
+var nodemon = require('gulp-nodemon');
 var plumber = require('gulp-plumber');
 var gutil = require('gulp-util');
 
@@ -39,7 +39,9 @@ gulp.task('scripts', function() {
     .pipe(concat('all.js'))
     .pipe(gulp.dest('client/dist'))
     .pipe(rename('all.min.js'))
-    .pipe(uglify())
+    .pipe(uglify({
+      mange: false
+    }))
     .pipe(gulp.dest('client/dist'));
 })
 
@@ -56,16 +58,15 @@ gulp.task('bower-install', function() {
 
 // start webserver (not api)
 gulp.task('webserver', function() {
-  gulp.src('./client')
-    .pipe(webserver({
-      lifereload: true,
-      open: true
-    }));
+  nodemon({ script: 'server/app.js', ext: 'html js' })
+    .on('restart', function() {
+      console.log('restarted!');
+    })
 });
 
 // watch for changes
 gulp.task('watch', function() {
-  gulp.watch(['client/app/*.js', 'client/app/**/*.js', 'client/components/**/*.js', 'client/bower_components'], ['lint', 'scripts', 'bower-install']);
+  gulp.watch(['client/app/*.js', 'client/app/**/*.js', 'client/components/**/*.js'], ['lint', 'scripts']);
 });
 
 gulp.task('default', ['lint', 'scripts', 'bower-install', 'sass', 'webserver', 'watch']);

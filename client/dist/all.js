@@ -1,11 +1,10 @@
 var app = angular.module('drink', [
   'ui.router',
-  'ngMock'
+  'ngResource'
 ]);
 
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
-  $urlRouterProvider
-    .otherwise('/');
+  $urlRouterProvider.otherwise('/');
 
   $locationProvider.html5Mode(true);
 }]);
@@ -30,7 +29,14 @@ app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', functio
   };
 
 }]);
-
+app.config(['$stateProvider', function($stateProvider) {
+  $stateProvider
+    .state('game', {
+      url: '/game',
+      templateUrl: 'app/game/game.html',
+      controller: 'gameCtrl'
+    });
+}]);
 app.controller('mainCtrl', ['$scope', function($scope) {
 
 }]);

@@ -1,11 +1,10 @@
 var app = angular.module('drink', [
   'ui.router',
-  'ngMock'
+  'ngResource'
 ]);
 
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
-  $urlRouterProvider
-    .otherwise('/');
+  $urlRouterProvider.otherwise('/');
 
   $locationProvider.html5Mode(true);
 }]);
