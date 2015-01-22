@@ -16,8 +16,24 @@ describe('Controller: gameCtrl', function() {
     });
   }));
 
-  it('should attach thngs to the scope', function() {
-    expect(scope.drinks.length).toBe(3);
+  it('gets two users', function() {
+    scope.play();
+    expect(scope.game.players.length).toBe(2);
+  });
+
+  it('gets an activity', function() {
+    scope.play();
+    expect(scope.game.activity).toBeDefined();
+  });
+
+  it('gets a drink', function() {
+    scope.play();
+    expect(scope.game.drink).toBeDefined();
+  })
+
+  it('attaches qty to drink', function() {
+    scope.play();
+    expect(scope.game.drink.qty).toBeGreaterThan(0);
   });
 
 });
