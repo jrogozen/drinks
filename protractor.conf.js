@@ -3,7 +3,7 @@
 exports.config = {
   allScriptsTimeout: 110000,
 
-  baseUrl: 'http://localhost:' + (process.env.PORT || '8000'),
+  baseUrl: 'http://localhost:' + (process.env.PORT || '8080'),
 
   chromeOnly: true,
 

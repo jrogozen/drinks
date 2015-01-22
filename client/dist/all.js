@@ -4,7 +4,8 @@ var app = angular.module('drink', [
 ]);
 
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
-  $urlRouterProvider.otherwise('/');
+  $urlRouterProvider
+    .otherwise('/');
 
   $locationProvider.html5Mode(true);
 }]);
