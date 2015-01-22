@@ -5,9 +5,15 @@ exports.config = {
 
   baseUrl: 'http://localhost:' + (process.env.PORT || '8000'),
 
+  chromeOnly: true,
+
   specs: [
     'e2e/**/*.spec.js'
   ],
+
+  capabilities: {
+    'browserName': 'chrome'
+  },
 
   framework: 'jasmine',
 
