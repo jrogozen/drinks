@@ -1,5 +1,6 @@
 var app = angular.module('drink', [
-  'ui.router'
+  'ui.router',
+  'ngMock'
 ]);
 
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
@@ -8,6 +9,10 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpP
 
   $locationProvider.html5Mode(true);
 }]);
+app.controller('gameCtrl', ['$scope', function($scope) {
+  $scope.drinks = [1,2,3];
+}]);
+
 app.controller('mainCtrl', ['$scope', function($scope) {
 
 }]);

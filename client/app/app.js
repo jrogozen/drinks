@@ -1,5 +1,6 @@
 var app = angular.module('drink', [
-  'ui.router'
+  'ui.router',
+  'ngMock'
 ]);
 
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
