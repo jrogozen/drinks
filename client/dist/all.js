@@ -9,8 +9,26 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpP
 
   $locationProvider.html5Mode(true);
 }]);
-app.controller('gameCtrl', ['$scope', function($scope) {
-  $scope.drinks = [1,2,3];
+app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', function($scope, activityFactory, drinkFactory) {
+  
+  $scope.game = {};
+
+  function getPlayers() {
+  }
+
+  function getActivity() {
+    return activityFactory.get();
+  }
+
+  function getDrink() {
+    return drinkFactory.get();
+  }
+
+  $scope.play = function() {
+    $scope.game.activity = getActivity();
+    $scope.game.drink = getDrink();
+  };
+
 }]);
 
 app.controller('mainCtrl', ['$scope', function($scope) {
@@ -97,8 +115,16 @@ app.factory('drinkFactory', [function() {
     }
   ];
 
+  var qtyPool = [0.5, 1, 1.5, 2];
+
+  function getRand(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
   function drawDrink() {
-    return drinks[Math.floor(Math.random() * drinks.length)];
+    var drink = getRand(drinks);
+    drink.qty = getRand(qtyPool);
+    return drink;
   }
 
   function addDrink(drink) {

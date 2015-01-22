@@ -14,8 +14,16 @@ app.factory('drinkFactory', [function() {
     }
   ];
 
+  var qtyPool = [0.5, 1, 1.5, 2];
+
+  function getRand(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
   function drawDrink() {
-    return drinks[Math.floor(Math.random() * drinks.length)];
+    var drink = getRand(drinks);
+    drink.qty = getRand(qtyPool);
+    return drink;
   }
 
   function addDrink(drink) {
