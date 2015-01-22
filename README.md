@@ -5,8 +5,12 @@ Randomize party games with friends and drinks!
 Let's set up the Angular frontend first with mock data stored in Arrays/Objects. We'll translate it later to pull data from Node server.
 
 ### Task Manager
-- Jon: Activity Factory, Drink Factory (test!)
-- Parag: User Factory, User Controller (test!)
+- Jon: ~~Activity Factory,~~ Drink Factory
+- Parag: User Factory, User Controller
+- Figure out how to test!
+ - E2E testing is set up with Protractor
+ - What should we use for client side (angular) unit tests?
+  - Karma vs Jasmine?
 
 ### Server
 
