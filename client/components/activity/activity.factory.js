@@ -3,21 +3,21 @@ app.factory('activityFactory', [function() {
     {
       _id: 0,
       name: 'Flip Cup',
-      videoId: '',
+      videos: ['JOYduGqZSRc', 'ijjDCaVYfjc', '8vDvtvryuUg', 'yZtRuxrQ5Ec'],
       description: 'Two players face each other on a table and flip cups. 3 cup minimum for each player, 4 if your name is Peng.',
       wikiLink: 'http://en.wikipedia.org/wiki/Flip_cup'
     },
     {
       _id: 1,
       name: 'Beer Pong',
-      videoId: '',
+      videos: ['JOYduGqZSRc', 'ijjDCaVYfjc', '8vDvtvryuUg', 'yZtRuxrQ5Ec'],
       description: '6 cup beer pong. Two balls per turn. Explosion, island, balls-back, and pull a cup if you overshoot are all cannon.',
       wikiLink: 'http://en.wikipedia.org/wiki/Beer_pong'
     },
     {
       _id: 2,
       name: 'Higher/Lower',
-      videoId: '',
+      videos: ['JOYduGqZSRc', 'ijjDCaVYfjc', '8vDvtvryuUg', 'yZtRuxrQ5Ec'],
       description: 'Alternate every turn being the dealer. Keep the card if you guess right. Most cards after 10 draws wins.',
       wikiLink: ''
     }
@@ -43,7 +43,7 @@ app.factory('activityFactory', [function() {
     });
 
     oldActivity.name = updatedActivity.name;
-    oldActivity.videoId = updatedActivity.videoId;
+    oldActivity.videos = updatedActivity.videos;
     oldActivity.description = updatedActivity.description;
     oldActivity.wikiLink = updatedActivity.wikiLink;
   }

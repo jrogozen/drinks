@@ -27,7 +27,7 @@ gulp.task('sass', function() {
         errorHandler: onError
       }))
     .pipe(sass())
-    .pipe(gulp.dest('client/css'));
+    .pipe(gulp.dest('client/dist/css'));
 });
 
 // concat + minify js

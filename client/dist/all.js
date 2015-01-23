@@ -12,8 +12,14 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpP
 app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', function($scope, activityFactory, drinkFactory) {
   
   $scope.game = {};
+  $scope.yt = {
+    width: '100%',
+    height: '100%',
+    videoid: ''
+  }
 
   $scope.playing = false;
+  $scope.videoPlaying = false;
 
   function getPlayers() {
     return [
@@ -35,6 +41,15 @@ app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', functio
   function getDrink() {
     return drinkFactory.get();
   }
+
+  function setVideo(id) {
+    $scope.yt.videoid = id;
+  }
+
+  $scope.setVideo = function(id) {
+    setVideo(id);
+    $scope.videoPlaying = true;
+  };
 
   $scope.play = function() {
     $scope.game.activity = getActivity();
@@ -68,21 +83,21 @@ app.factory('activityFactory', [function() {
     {
       _id: 0,
       name: 'Flip Cup',
-      videoId: '',
+      videos: ['JOYduGqZSRc', 'ijjDCaVYfjc', '8vDvtvryuUg', 'yZtRuxrQ5Ec'],
       description: 'Two players face each other on a table and flip cups. 3 cup minimum for each player, 4 if your name is Peng.',
       wikiLink: 'http://en.wikipedia.org/wiki/Flip_cup'
     },
     {
       _id: 1,
       name: 'Beer Pong',
-      videoId: '',
+      videos: ['JOYduGqZSRc', 'ijjDCaVYfjc', '8vDvtvryuUg', 'yZtRuxrQ5Ec'],
       description: '6 cup beer pong. Two balls per turn. Explosion, island, balls-back, and pull a cup if you overshoot are all cannon.',
       wikiLink: 'http://en.wikipedia.org/wiki/Beer_pong'
     },
     {
       _id: 2,
       name: 'Higher/Lower',
-      videoId: '',
+      videos: ['JOYduGqZSRc', 'ijjDCaVYfjc', '8vDvtvryuUg', 'yZtRuxrQ5Ec'],
       description: 'Alternate every turn being the dealer. Keep the card if you guess right. Most cards after 10 draws wins.',
       wikiLink: ''
     }
@@ -108,7 +123,7 @@ app.factory('activityFactory', [function() {
     });
 
     oldActivity.name = updatedActivity.name;
-    oldActivity.videoId = updatedActivity.videoId;
+    oldActivity.videos = updatedActivity.videos;
     oldActivity.description = updatedActivity.description;
     oldActivity.wikiLink = updatedActivity.wikiLink;
   }
@@ -173,6 +188,65 @@ app.factory('drinkFactory', [function() {
     edit: editDrink
   };
 }]);
+app.directive('youtube', function($window) {
+  return {
+    restrict: "E",
+
+    scope: {
+      height: "@",
+      width: "@",
+      videoid: "@"
+    },
+
+    template: '<div></div>',
+
+    link: function(scope, element, attrs) {
+      var tag = document.createElement('script');
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      var player;
+
+      $window.onYouTubeIframeAPIReady = function() {
+        player = new YT.Player(element.children()[0], {
+
+          playerVars: {
+            autoplay: 0,
+            html5: 1,
+            theme: "light",
+            modestbranding: 1,
+            color: "white",
+            iv_load_policy: 3,
+            controls: 1
+          },
+
+          height: scope.height,
+          width: scope.width,
+          videoId: scope.videoid
+        });
+      };
+
+      scope.$watch('videoid', function(newValue, oldValue) {
+        console.log('ugh');
+        if (newValue == oldValue) {
+          return;
+        }
+        console.log("player", player);
+        console.log("videoId", scope.videoId);
+        player.cueVideoById(scope.videoid);
+      });
+
+      scope.$watch('height + width', function(newValue, oldValue) {
+        console.log('what');
+        if (newValue == oldValue) {
+          return;
+        }
+        player.setSize(scope.width, scope.height);
+      });
+    }
+  };
+});
 app.filter('decimalToWord', function() {
   return function(num) {
     // 0, 1, 1.5, 2

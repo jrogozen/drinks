@@ -2,11 +2,26 @@
 
 <div class="container">
 
-  <section ng-if="playing" class="well">
+  <section ng-if="playing" class="well col-sm-12">
     <article>
-      <h1>{{game.activity.name}}</h1>
+      <h1>{{game.activity.name}} <small><a target="_blank" href="{{game.activity.wikiLink}}">Wiki</a></small></h1>
       <blockquote>{{game.activity.description}}</blockquote>
-      <p><a target="_blank" href="{{game.activity.wikiLink}}">Wiki</a></p>
+    </article>
+    <article class="videos">
+      <div class="videos-list">
+        <div class="row">
+          <ul>
+            <li class="thumbnail col-sm-1" ng-repeat="video in game.activity.videos">
+              <a ng-click="setVideo(video)">
+                <img src="http://img.youtube.com/vi/{{video}}/0.jpg"/>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="video-responsive" ng-if="videoPlaying">
+        <youtube width="{{yt.width}}" height="{{yt.height}}" videoid="{{yt.videoid}}"></youtube>
+      </div>
     </article>
   </section>
 
