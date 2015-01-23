@@ -2,7 +2,7 @@
 
   <section ng-if="playing" class="well">
     <article>
-      <h1 class="sub-title">{{game.activity.name}}</h1>
+      <h1>{{game.activity.name}}</h1>
       <blockquote>{{game.activity.description}}</blockquote>
       <p><a target="_blank" href="{{game.activity.wikiLink}}">Wiki</a></p>
     </article>
@@ -26,7 +26,7 @@
   </section>
 
   <section class="col-sm-12 col-md-6" ng-if="playing">
-    <h1>Loser drinks {{game.drink.qty | decimalToWord}} {{game.drink.type}}</h1>
+    <h1 class="rule">Loser drinks {{game.drink.qty | decimalToWord}} {{game.drink.type}}</h1>
   </section>
 
   <section class="col-sm-12">
