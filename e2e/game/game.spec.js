@@ -22,5 +22,4 @@ describe('Game View', function() {
     page.button.click();
     expect(page.rule.getText()).toBeDefined();
   });
-
 });
