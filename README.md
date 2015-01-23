@@ -1,12 +1,36 @@
 # Drink
 Randomize party games with friends and drinks!
 
+## Install Instructions
+    git clone https://github.com/jrogozen/drinks.git
+
+Then
+    
+    npm install && bower install
+
+Make sure you have gulp, karma, and protractor installed
+
+    npm install -g gulp
+    npm install -g karma
+    npm install -g karma-cli
+    npm install -g protractor
+
+- run 'gulp' in terminal to start server on localhost:8080
+- run 'protractor protractor.conf.js' to run e2e tests
+ - place e2e tests in /e2e/**/*.js
+- run 'karma start && run' to run unit tests + watcher
+ - place unit tests in /test/*.js
+- gulp and karma continuously run
+
+## Gulp Todo
+- incorporate sass files / minify
+
 ## To Do
 Let's set up the Angular frontend first with mock data stored in Arrays/Objects. We'll translate it later to pull data from Node server.
 
 ### Task Manager
-- Jon: ~~Activity Factory,~~ ~~Drink Factory,~~ ~~Game Controller,~~ 
-- Parag: User Factory, User Controller, Nav (HTML), Nav Controller (put under components and include in html via ng-include)
+- Jon: ~~Activity Factory,~~ ~~Drink Factory,~~ Game Controller, Nav
+- Parag: User Factory, User Controller
 - E2E testing is set up with Protractor
 - Karma for unit testing
 
