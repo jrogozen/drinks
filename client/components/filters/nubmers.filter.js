@@ -12,7 +12,7 @@ app.filter('decimalToWord', function() {
 
       // handle all other .5s
       if (_.last(numArr) == "5") {
-        return arr[0] + " and a half";
+        return numArr[0] + " and a half";
       }
 
     } else {
