@@ -2,15 +2,15 @@ app.factory('drinkFactory', [function() {
   var drinks = [
     {
       _id: 0,
-      type: "Beer"
+      type: "Beer(s)"
     },
     {
       _id: 1,
-      type: "Shot"
+      type: "Shot(s)"
     },
     {
       _id: 2,
-      type: "Mixed Drink"
+      type: "Mixed Drink(s)"
     }
   ];
 
