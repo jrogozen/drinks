@@ -5,6 +5,9 @@ var MainPage = function() {
   this.blockquote = element(by.binding('game.activity.description'));
   this.rule = element(by.css('.rule'));
   this.button = element(by.buttonText('Play'));
+
+  this.videoThumb = element.all(by.css('.thumbnail')).first().element(by.css('img'));
+  this.video = element(by.id('video-player'));
 }
 
 module.exports = new MainPage();

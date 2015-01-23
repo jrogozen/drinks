@@ -38,17 +38,13 @@ app.directive('youtube', function($window) {
       };
 
       scope.$watch('videoid', function(newValue, oldValue) {
-        console.log('ugh');
         if (newValue == oldValue) {
           return;
         }
-        console.log("player", player);
-        console.log("videoId", scope.videoId);
         player.cueVideoById(scope.videoid);
       });
 
       scope.$watch('height + width', function(newValue, oldValue) {
-        console.log('what');
         if (newValue == oldValue) {
           return;
         }

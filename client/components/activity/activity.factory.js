@@ -3,7 +3,7 @@ app.factory('activityFactory', [function() {
     {
       _id: 0,
       name: 'Flip Cup',
-      videos: ['JOYduGqZSRc', 'ijjDCaVYfjc', '8vDvtvryuUg', 'yZtRuxrQ5Ec'],
+      videos: ['iQR51zpcnOQ', 'WexBdW2mlAs', '4wm0qt4d7ro'],
       description: 'Two players face each other on a table and flip cups. 3 cup minimum for each player, 4 if your name is Peng.',
       wikiLink: 'http://en.wikipedia.org/wiki/Flip_cup'
     },
@@ -17,7 +17,7 @@ app.factory('activityFactory', [function() {
     {
       _id: 2,
       name: 'Higher/Lower',
-      videos: ['JOYduGqZSRc', 'ijjDCaVYfjc', '8vDvtvryuUg', 'yZtRuxrQ5Ec'],
+      videos: ['_XxrYPLam74', '6INCl9pIHRg'],
       description: 'Alternate every turn being the dealer. Keep the card if you guess right. Most cards after 10 draws wins.',
       wikiLink: ''
     }

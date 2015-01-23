@@ -11,7 +11,7 @@
       <div class="videos-list">
         <div class="row">
           <ul>
-            <li class="thumbnail col-sm-1" ng-repeat="video in game.activity.videos">
+            <li class="thumbnail col-sm-2" ng-repeat="video in game.activity.videos">
               <a ng-click="setVideo(video)">
                 <img src="http://img.youtube.com/vi/{{video}}/0.jpg"/>
               </a>
@@ -20,7 +20,7 @@
         </div>
       </div>
       <div class="video-responsive" ng-if="videoPlaying">
-        <youtube width="{{yt.width}}" height="{{yt.height}}" videoid="{{yt.videoid}}"></youtube>
+        <youtube id="video-player" width="{{yt.width}}" height="{{yt.height}}" videoid="{{yt.videoid}}"></youtube>
       </div>
     </article>
   </section>

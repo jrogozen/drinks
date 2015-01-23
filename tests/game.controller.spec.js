@@ -26,6 +26,11 @@ describe('Controller: gameCtrl', function() {
     expect(scope.game.activity).toBeDefined();
   });
 
+  it('loads videos', function() {
+    scope.play();
+    expect(scope.game.activity.videos.length).toBeGreaterThan(0);
+  });
+
   it('gets a drink', function() {
     scope.play();
     expect(scope.game.drink).toBeDefined();

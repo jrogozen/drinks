@@ -22,4 +22,10 @@ describe('Game View', function() {
     page.button.click();
     expect(page.rule.getText()).toBeDefined();
   });
+
+  it('plays video on thumbnail click', function() {
+    page.button.click();
+    page.videoThumb.click();
+    expect(page.video).not.toBeNull();
+  });
 });

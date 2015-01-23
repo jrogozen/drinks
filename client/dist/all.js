@@ -83,7 +83,7 @@ app.factory('activityFactory', [function() {
     {
       _id: 0,
       name: 'Flip Cup',
-      videos: ['JOYduGqZSRc', 'ijjDCaVYfjc', '8vDvtvryuUg', 'yZtRuxrQ5Ec'],
+      videos: ['iQR51zpcnOQ', 'WexBdW2mlAs', '4wm0qt4d7ro'],
       description: 'Two players face each other on a table and flip cups. 3 cup minimum for each player, 4 if your name is Peng.',
       wikiLink: 'http://en.wikipedia.org/wiki/Flip_cup'
     },
@@ -97,7 +97,7 @@ app.factory('activityFactory', [function() {
     {
       _id: 2,
       name: 'Higher/Lower',
-      videos: ['JOYduGqZSRc', 'ijjDCaVYfjc', '8vDvtvryuUg', 'yZtRuxrQ5Ec'],
+      videos: ['_XxrYPLam74', '6INCl9pIHRg'],
       description: 'Alternate every turn being the dealer. Keep the card if you guess right. Most cards after 10 draws wins.',
       wikiLink: ''
     }
@@ -228,17 +228,13 @@ app.directive('youtube', function($window) {
       };
 
       scope.$watch('videoid', function(newValue, oldValue) {
-        console.log('ugh');
         if (newValue == oldValue) {
           return;
         }
-        console.log("player", player);
-        console.log("videoId", scope.videoId);
         player.cueVideoById(scope.videoid);
       });
 
       scope.$watch('height + width', function(newValue, oldValue) {
-        console.log('what');
         if (newValue == oldValue) {
           return;
         }
@@ -247,6 +243,9 @@ app.directive('youtube', function($window) {
     }
   };
 });
+app.controller('navbarCtrl', ['$scope', function($scope) {
+
+}]);
 app.filter('decimalToWord', function() {
   return function(num) {
     // 0, 1, 1.5, 2
@@ -269,6 +268,3 @@ app.filter('decimalToWord', function() {
     }
   };
 });
-app.controller('navbarCtrl', ['$scope', function($scope) {
-
-}]);
