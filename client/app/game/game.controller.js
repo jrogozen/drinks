@@ -2,7 +2,19 @@ app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', functio
   
   $scope.game = {};
 
+  $scope.playing = false;
+
   function getPlayers() {
+    return [
+      {
+        _id: 0,
+        name: "Jon"
+      },
+      {
+        _id: 1,
+        name: "Parag"
+      }
+    ];
   }
 
   function getActivity() {
@@ -16,6 +28,8 @@ app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', functio
   $scope.play = function() {
     $scope.game.activity = getActivity();
     $scope.game.drink = getDrink();
+    $scope.game.players = getPlayers();
+    $scope.playing = true;
   };
 
 }]);

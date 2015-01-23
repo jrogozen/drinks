@@ -1,4 +1,36 @@
 <div class="container">
-  <button class="btn btn-primary" ng-click="play()">Play</button>
-  {{game}}
+
+  <section ng-if="playing" class="well">
+    <article>
+      <h1 class="sub-title">{{game.activity.name}}</h1>
+      <blockquote>{{game.activity.description}}</blockquote>
+      <p><a target="_blank" href="{{game.activity.wikiLink}}">Wiki</a></p>
+    </article>
+  </section>
+
+  <section class="col-sm-12 col-md-6" ng-if="playing">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <td><strong>#</strong></td>
+          <td><strong>Name</strong></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="player in game.players">
+          <td>{{$index +1}}</td>
+          <td>{{player.name}}</td>
+        </tr>
+      <tbody>
+    </table>
+  </section>
+
+  <section class="col-sm-12 col-md-6" ng-if="playing">
+    <h1>Loser drinks {{game.drink.qty | decimalToWord}} {{game.drink.type}}</h1>
+  </section>
+
+  <section class="col-sm-12">
+    <button class="btn btn-lg btn-primary" ng-click="play()">Play</button>
+  </section>
+
 </div>

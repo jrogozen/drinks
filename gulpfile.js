@@ -40,7 +40,7 @@ gulp.task('scripts', function() {
     .pipe(gulp.dest('client/dist'))
     .pipe(rename('all.min.js'))
     .pipe(uglify({
-      mange: false
+      mangle: false
     }))
     .pipe(gulp.dest('client/dist'));
 })

@@ -13,7 +13,19 @@ app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', functio
   
   $scope.game = {};
 
+  $scope.playing = false;
+
   function getPlayers() {
+    return [
+      {
+        _id: 0,
+        name: "Jon"
+      },
+      {
+        _id: 1,
+        name: "Parag"
+      }
+    ];
   }
 
   function getActivity() {
@@ -27,6 +39,8 @@ app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', functio
   $scope.play = function() {
     $scope.game.activity = getActivity();
     $scope.game.drink = getDrink();
+    $scope.game.players = getPlayers();
+    $scope.playing = true;
   };
 
 }]);
@@ -159,3 +173,16 @@ app.factory('drinkFactory', [function() {
     edit: editDrink
   };
 }]);
+app.filter('decimalToWord', function() {
+  return function(num) {
+    var numArr = num.toString().split("");
+    console.log(numArr[-1]);
+    if (_.last(numArr) == "5") {
+      numArr.pop();
+      numArr.pop();
+      numArr.push("and a half");
+    }
+    return numArr.join(" ");
+    return numArr;
+  };
+});
