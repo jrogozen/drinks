@@ -124,15 +124,15 @@ app.factory('drinkFactory', [function() {
   var drinks = [
     {
       _id: 0,
-      type: "Beer"
+      type: "Beer(s)"
     },
     {
       _id: 1,
-      type: "Shot"
+      type: "Shot(s)"
     },
     {
       _id: 2,
-      type: "Mixed Drink"
+      type: "Mixed Drink(s)"
     }
   ];
 
@@ -175,14 +175,23 @@ app.factory('drinkFactory', [function() {
 }]);
 app.filter('decimalToWord', function() {
   return function(num) {
+    // 0, 1, 1.5, 2
     var numArr = num.toString().split("");
-    console.log(numArr[-1]);
-    if (_.last(numArr) == "5") {
-      numArr.pop();
-      numArr.pop();
-      numArr.push("and a half");
+
+    if (numArr.length > 1) {
+      
+      // handle 0.5
+      if (numArr[0] == 0) {
+        return "half a";
+      }
+
+      // handle all other .5s
+      if (_.last(numArr) == "5") {
+        return arr[0] + " and a half";
+      }
+
+    } else {
+      return numArr.join(" ")
     }
-    return numArr.join(" ");
-    return numArr;
   };
 });
