@@ -5,7 +5,7 @@ app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', functio
     width: '100%',
     height: '100%',
     videoid: ''
-  }
+  };
 
   $scope.playing = false;
   $scope.videoPlaying = false;

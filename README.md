@@ -29,7 +29,7 @@ Make sure you have gulp, karma, and protractor installed
 Let's set up the Angular frontend first with mock data stored in Arrays/Objects. We'll translate it later to pull data from Node server.
 
 ### Task Manager
-- Jon: ~~Activity Factory,~~ ~~Drink Factory,~~ Game Controller, Nav
+- Jon: ~~Activity Factory,~~ ~~Drink Factory,~~ Game Controller, ~~Nav,~~
 - Parag: User Factory, User Controller
 - E2E testing is set up with Protractor
 - Karma for unit testing
