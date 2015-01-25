@@ -63,6 +63,19 @@ app.config(['$stateProvider', function($stateProvider) {
       controller: 'mainCtrl'
     });
 }]);
+app.controller('userCtrl', ['$scope', 'userFactory', function($scope, userFactory) {
+
+  $scope.users = userFactory.get();
+
+}]);
+app.config(['$stateProvider', function($stateProvider) {
+  $stateProvider
+    .state('user', {
+      url: '/user',
+      templateUrl: 'app/user/user.html',
+      controller: 'userCtrl'
+    });
+}]);
 app.factory('activityFactory', [function() {
   var activities = [
     {
@@ -197,4 +210,32 @@ app.filter('decimalToWord', function() {
 });
 app.controller('navbarCtrl', ['$scope', function($scope) {
 
+}]);
+app.factory('userFactory', [function() {
+  var users = [
+    {
+      _id: 0,
+      name: 'Jon'
+    },
+    {
+      _id: 1,
+      name: 'Parag'
+    },
+    {
+      _id: 2,
+      name: 'Daniel'
+    },
+    {
+      _id: 3,
+      name: 'Peng'
+    }
+  ];
+
+  function allUsers() {
+    return users;
+  }
+
+  return {
+    get: allUsers
+  };
 }]);
