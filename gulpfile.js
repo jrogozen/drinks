@@ -9,6 +9,8 @@ var wiredep = require('wiredep').stream;
 var nodemon = require('gulp-nodemon');
 var plumber = require('gulp-plumber');
 var gutil = require('gulp-util');
+var mocha = require('gulp-mocha');
+var karma = require('karma').server;
 
 // lint
 gulp.task('lint', function() {
@@ -64,12 +66,34 @@ gulp.task('webserver', function() {
     })
 });
 
+// server tests
+gulp.task('mocha-test', function() {
+  return gulp.src('server/api/**/*.js', {read: false})
+    .pipe(mocha({reporter: 'nyan'}))
+    .once('error', function () {
+        process.exit(1);
+    })
+    .once('end', function () {
+        process.exit();
+    });
+});
+
+// karma test
+gulp.task('karma-test', function(done) {
+  karma.start({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: true
+  }, done);
+});
+    
 // watch for changes
 gulp.task('watch', function() {
   gulp.watch(['client/app/*.js', 'client/app/**/*.js', 'client/components/**/*.js'], ['lint', 'scripts']);
 });
 
 gulp.task('default', ['lint', 'scripts', 'bower-install', 'sass', 'webserver', 'watch']);
+
+gulp.task('test', ['mocha-test', 'karma-test']);
 
 function onError(err) {
   gutil.beep();
