@@ -29,7 +29,7 @@ module.exports = function(config) {
       'client/components/**/*.js',
       'client/app/**/*.html',
       // 'client/components/**/*.html'
-      'test/*.js'
+      'test/client/*.js'
     ],
 
 
