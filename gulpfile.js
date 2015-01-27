@@ -68,11 +68,11 @@ gulp.task('webserver', function() {
 
 // server tests
 gulp.task('mocha-test', function() {
-  return gulp.src('server/api/**/*.js', {read: false})
+  return gulp.src('test/server/*.js', {read: false})
     .pipe(mocha({reporter: 'nyan'}))
-    .once('error', function () {
-        process.exit(1);
-    })
+    // .once('error', function () {
+    //     process.exit(1);
+    // })
     .once('end', function () {
         process.exit();
     });
@@ -93,7 +93,7 @@ gulp.task('watch', function() {
 
 gulp.task('default', ['lint', 'scripts', 'bower-install', 'sass', 'webserver', 'watch']);
 
-gulp.task('test', ['mocha-test', 'karma-test']);
+gulp.task('test', ['mocha-test']);
 
 function onError(err) {
   gutil.beep();

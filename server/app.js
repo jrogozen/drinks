@@ -9,19 +9,18 @@ var bodyParser = require('body-parser')
 app.use(express.static(path.join(__dirname, '../client')));
 app.use(bodyParser.urlencoded({ extended: false }))
 
+app.set('env', process.env.NODE_ENV || 'development');
+
 /* DB STUFF */
 var mongoose = require('mongoose');
-
-mongoose.connect(config.mongo_uri);
-
-var server = require('http').createServer(app);
+mongoose.connect(config.db[app.get('env')]);
 
 /* ROUTES */
 require('./routes')(app);
 
 /* START THE SERVER */
-server.listen(config.port, function() {
-  console.log('Magic sometimes happens on port ' + config.port);
-});
+app.listen(8080);
+console.log('running on', app.get('env'));
+console.log('Magic sometimes happens on port 8080');
 
 exports = module.exports = app;
