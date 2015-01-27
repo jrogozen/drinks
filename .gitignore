@@ -1,4 +1,4 @@
 client/bower_components/*
 client/dist/*
 node_modules/*
-server/config/*
+server/config.js
