@@ -24,7 +24,10 @@ app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', functio
   }
 
   function getActivity() {
-    return activityFactory.get();
+    activityFactory.get()
+      .$promise.then(function(activities) {
+        $scope.game.activity = activities[Math.floor(Math.random() * activities.length)];
+      });
   }
 
   function getDrink() {
@@ -41,7 +44,7 @@ app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', functio
   };
 
   $scope.play = function() {
-    $scope.game.activity = getActivity();
+    getActivity();
     $scope.game.drink = getDrink();
     $scope.game.players = getPlayers();
     $scope.playing = true;

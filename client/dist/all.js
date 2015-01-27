@@ -3,6 +3,8 @@ var app = angular.module('drink', [
   'ngResource'
 ]);
 
+app.constant('API_URL', 'http://localhost:8080/api');
+
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
   $urlRouterProvider
     .otherwise('/');
@@ -35,7 +37,10 @@ app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', functio
   }
 
   function getActivity() {
-    return activityFactory.get();
+    activityFactory.get()
+      .$promise.then(function(activities) {
+        $scope.game.activity = activities[Math.floor(Math.random() * activities.length)];
+      });
   }
 
   function getDrink() {
@@ -52,7 +57,7 @@ app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', functio
   };
 
   $scope.play = function() {
-    $scope.game.activity = getActivity();
+    getActivity();
     $scope.game.drink = getDrink();
     $scope.game.players = getPlayers();
     $scope.playing = true;
@@ -78,33 +83,16 @@ app.config(['$stateProvider', function($stateProvider) {
       controller: 'mainCtrl'
     });
 }]);
-app.factory('activityFactory', [function() {
-  var activities = [
-    {
-      _id: 0,
-      name: 'Flip Cup',
-      videos: ['iQR51zpcnOQ', 'WexBdW2mlAs', '4wm0qt4d7ro'],
-      description: 'Two players face each other on a table and flip cups. 3 cup minimum for each player, 4 if your name is Peng.',
-      wikiLink: 'http://en.wikipedia.org/wiki/Flip_cup'
-    },
-    {
-      _id: 1,
-      name: 'Beer Pong',
-      videos: ['JOYduGqZSRc', 'ijjDCaVYfjc', '8vDvtvryuUg', 'yZtRuxrQ5Ec'],
-      description: '6 cup beer pong. Two balls per turn. Explosion, island, balls-back, and pull a cup if you overshoot are all cannon.',
-      wikiLink: 'http://en.wikipedia.org/wiki/Beer_pong'
-    },
-    {
-      _id: 2,
-      name: 'Higher/Lower',
-      videos: ['_XxrYPLam74', '6INCl9pIHRg'],
-      description: 'Alternate every turn being the dealer. Keep the card if you guess right. Most cards after 10 draws wins.',
-      wikiLink: ''
+app.factory('activityFactory', ['$resource', 'API_URL', function($resource, API_URL) {
+
+  var activities = $resource(API_URL + '/activities/:id', {}, {
+    update: {
+      method: 'PUT'
     }
-  ];
+  });
 
   function drawActivity() {
-    return activities[Math.floor(Math.random() * activities.length)];
+    return activities.query();
   }
 
   function addActivity(activity) {
@@ -243,6 +231,9 @@ app.factory('drinkFactory', [function() {
     edit: editDrink
   };
 }]);
+app.controller('navbarCtrl', ['$scope', function($scope) {
+
+}]);
 app.filter('decimalToWord', function() {
   return function(num) {
     // 0, 1, 1.5, 2
@@ -265,6 +256,3 @@ app.filter('decimalToWord', function() {
     }
   };
 });
-app.controller('navbarCtrl', ['$scope', function($scope) {
-
-}]);

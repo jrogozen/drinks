@@ -3,6 +3,8 @@ var app = angular.module('drink', [
   'ngResource'
 ]);
 
+app.constant('API_URL', 'http://localhost:8080/api');
+
 app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider', function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
   $urlRouterProvider
     .otherwise('/');

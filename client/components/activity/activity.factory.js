@@ -1,30 +1,13 @@
-app.factory('activityFactory', [function() {
-  var activities = [
-    {
-      _id: 0,
-      name: 'Flip Cup',
-      videos: ['iQR51zpcnOQ', 'WexBdW2mlAs', '4wm0qt4d7ro'],
-      description: 'Two players face each other on a table and flip cups. 3 cup minimum for each player, 4 if your name is Peng.',
-      wikiLink: 'http://en.wikipedia.org/wiki/Flip_cup'
-    },
-    {
-      _id: 1,
-      name: 'Beer Pong',
-      videos: ['JOYduGqZSRc', 'ijjDCaVYfjc', '8vDvtvryuUg', 'yZtRuxrQ5Ec'],
-      description: '6 cup beer pong. Two balls per turn. Explosion, island, balls-back, and pull a cup if you overshoot are all cannon.',
-      wikiLink: 'http://en.wikipedia.org/wiki/Beer_pong'
-    },
-    {
-      _id: 2,
-      name: 'Higher/Lower',
-      videos: ['_XxrYPLam74', '6INCl9pIHRg'],
-      description: 'Alternate every turn being the dealer. Keep the card if you guess right. Most cards after 10 draws wins.',
-      wikiLink: ''
+app.factory('activityFactory', ['$resource', 'API_URL', function($resource, API_URL) {
+
+  var activities = $resource(API_URL + '/activities/:id', {}, {
+    update: {
+      method: 'PUT'
     }
-  ];
+  });
 
   function drawActivity() {
-    return activities[Math.floor(Math.random() * activities.length)];
+    return activities.query();
   }
 
   function addActivity(activity) {
