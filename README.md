@@ -26,7 +26,11 @@ Make sure you have gulp, karma, and protractor installed
 - incorporate sass files / minify
 
 ## To Do
-Let's set up the Angular frontend first with mock data stored in Arrays/Objects. We'll translate it later to pull data from Node server.
+- Server API for drinks + udpate drinksFactory
+- Drinks Controller / View
+- Server API for player + update playerFactory
+- Player controller / View can be ng-included into Game View
+- Sequence of Events: Index -> Play -> Add Players -> Game (play button, edit players)
 
 ### Task Manager
 - Jon: ~~Activity Factory,~~ ~~Drink Factory,~~ Game Controller, ~~Nav,~~
