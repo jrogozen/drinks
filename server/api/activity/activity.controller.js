@@ -13,7 +13,7 @@ exports.index = function(req, res) {
 exports.show = function(req, res) {
   Activity.findById(req.params.id, function(err, activity) {
     if(err) { return handleError(res, err); }
-    if(!activity) { return res.send(404); }
+    if(!activity) { return res.sendStatus(404); }
     return res.status(200).json(activity);
   });
 };
@@ -29,7 +29,7 @@ exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
   Activity.findById(req.params.id, function(err, activity) {
     if(err) { return handleError(res, err); }
-    if(!activity) {return res.send(404); }
+    if(!activity) {return res.sendStatus(404); }
     var updated = _.merge(activity, req.body);
     updated.save(function(err) {
       if(err) { return handleError(res, err); }
@@ -41,7 +41,7 @@ exports.update = function(req, res) {
 exports.destroy = function(req, res) {
   Activity.findById(req.params.id, function(err, activity) {
     if(err) { return handleError(res, err); }
-    if(!activity) { return res.send(404); }
+    if(!activity) { return res.sendStatus(404); }
     activity.remove(function(err) {
       if(err) { return handleError(res, err); }
       return res.sendStatus(204);

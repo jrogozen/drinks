@@ -1,5 +1,5 @@
 <ul class="list-unstyled">
-  <li class="panel" ng-repeat="(id, activity) in activities">
+  <li class="panel" ng-repeat="activity in activities">
     <section>
       <h2>{{activity.name}}
       <a class="btn btn-xs btn-warning" ui-sref="activities.edit({id: activity._id})">edit</a>

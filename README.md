@@ -26,7 +26,7 @@ Make sure you have gulp, karma, and protractor installed
 - incorporate sass files / minify
 
 ## To Do
-- Server API for drinks + udpate drinksFactory
+- ~~Server API for drinks~~ + udpate drinksFactory
 - Drinks Controller / View
 - Server API for player + update playerFactory
 - Player controller / View can be ng-included into Game View

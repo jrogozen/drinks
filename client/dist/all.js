@@ -73,6 +73,7 @@ app.controller('activityCtrl', ['$scope', '$state', '$stateParams', 'activityFac
 
     activityFactory.add(activity).$promise.then(function(data) {
       $state.go('activities.list');
+      $scope.activity = {};
     });
   };
 
@@ -149,6 +150,54 @@ app.config(['$stateProvider', function($stateProvider) {
       controller: 'mainCtrl'
     });
 }]);
+app.controller('drinkCtrl', ['$scope', '$stateParams', '$state', 'drinkFactory', function($scope, $stateParams, $state, drinkFactory) {
+
+  if($stateParams.id) {
+    drinkFactory.find($stateParams.id);
+    $scope.drink = drinkFactory.models.drink;
+  }
+
+  $scope.addDrink = function(drink) {
+    drinkFactory.add(drink).$promise.then(function(data) {
+      $scope.drink = {};
+      $state.go('drinks.list');
+    });
+  };
+
+}]);
+app.controller('drinksCtrl', ['$scope', '$stateParams', 'drinkFactory', function($scope, $stateParams, drinkFactory) {
+
+  $scope.deleteDrink = function(drinkId) {
+    drinkFactory.remove(drinkId);
+  };
+
+  $scope.drinks = drinkFactory.models.drinks;
+
+}]);
+app.config(['$stateProvider', function($stateProvider) {
+  $stateProvider
+    .state('drinks', {
+      url: '/drinks',
+      abstract: true,
+      templateUrl: 'app/drinks/drinks.html',
+      controller: 'drinksCtrl'
+    })
+    .state('drinks.list', {
+      url: '',
+      templateUrl: 'app/drinks/drinks.list.html'
+    })
+    .state('drinks.new', {
+      url: '/new',
+      templateUrl: 'app/drinks/drinks.new.html',
+      controller: 'drinkCtrl'
+    })
+    .state('drinks.edit', {
+      url: '/:id',
+      templateUrl: 'app/drinks/drinks.new.html',
+      controller: 'drinkCtrl'
+    })
+    ;
+}]);
 app.factory('activityFactory', ['$resource', '$state', 'API_URL', function($resource, $state, API_URL) {
 
   var activities = $resource(API_URL + '/activities/:id', {id: '@_id'}, {
@@ -162,7 +211,7 @@ app.factory('activityFactory', ['$resource', '$state', 'API_URL', function($reso
     activity: {}
   };
 
-  function drawActivity() {
+  function getActivities() {
     models.activities.length = 0;
     return activities.query(function(data) {
       _.each(data, function(curr, indx, arr) {
@@ -184,7 +233,7 @@ app.factory('activityFactory', ['$resource', '$state', 'API_URL', function($reso
     if(activity._id) {
       //need to update
       return activities.update(activity, function(data) {
-        drawActivity();
+        getActivities();
       });
     } else {
       //need to save
@@ -205,10 +254,10 @@ app.factory('activityFactory', ['$resource', '$state', 'API_URL', function($reso
     });
   }
 
-  drawActivity();
+  getActivities();
 
   return {
-    get: drawActivity,
+    get: getActivities,
     find: findActivity,
     add: addActivity,
     remove: removeActivity,
@@ -270,59 +319,6 @@ app.directive('youtube', function($window) {
     }
   };
 });
-app.factory('drinkFactory', [function() {
-  var drinks = [
-    {
-      _id: 0,
-      type: "Beer(s)"
-    },
-    {
-      _id: 1,
-      type: "Shot(s)"
-    },
-    {
-      _id: 2,
-      type: "Mixed Drink(s)"
-    }
-  ];
-
-  var qtyPool = [0.5, 1, 1.5, 2];
-
-  function getRand(arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
-  }
-
-  function drawDrink() {
-    var drink = getRand(drinks);
-    drink.qty = getRand(qtyPool);
-    return drink;
-  }
-
-  function addDrink(drink) {
-    drinks.push(drink);
-  }
-
-  function removeDrink(drinkId) {
-    _.remove(drinks, function(d) {
-      return d._id == drinkId;
-    });
-  }
-
-  function editDrink(updatedDrink) {
-    var oldDrink = _.find(drinks, function(d) {
-      return d._id == updatedDrink._id;
-    });
-
-    oldDrink.name = updatedDrink.type;
-  }
-
-  return {
-    get: drawDrink,
-    add: addDrink,
-    remove: removeDrink,
-    edit: editDrink
-  };
-}]);
 app.filter('decimalToWord', function() {
   return function(num) {
     // 0, 1, 1.5, 2
@@ -345,6 +341,76 @@ app.filter('decimalToWord', function() {
     }
   };
 });
+app.factory('drinkFactory', ['$resource', '$state', 'API_URL', function($resource, $state, API_URL) {
+  var drinks = $resource(API_URL + '/drinks/:id', {id: '@_id'}, {
+    update: {
+      method: 'PUT'
+    }
+  });
+
+  var models = {
+    drinks: [],
+    drink: {}
+  };
+
+  var qtyPool = [0.5, 1, 1.5, 2];
+
+  function getRand(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function getDrinks() {
+    models.drinks.length = 0;
+    return drinks.query(function(data) {
+      _.each(data, function(curr, indx, arr) {
+        curr.qty = getRand(qtyPool);
+        models.drinks.push(curr);
+      });
+    });
+  }
+
+  function findDrink(drinkId) {
+    models.drink.length = 0;
+    return drinks.get({id: drinkId}, function(drink) {
+      _.each(drink, function(value, key) {
+        models.drink[key] = value;
+      });
+    });
+  }
+
+  function addDrink(drink) {
+    if(drink._id) {
+      return drinks.update(drink, function(data) {
+        getDrinks();
+      });
+    } else {
+      return drinks.save(drink, function(data) {
+        models.drinks.push(data);
+      });
+    }
+  }
+
+  function removeDrink(drinkId) {
+    drinks.delete({id: drinkId}, function() {
+      for(var i=0; i < models.drinks.length; i++) {
+        if(models.drinks[i]._id == drinkId) {
+          models.drinks = models.drinks.splice(i, 1);
+          break;
+        }
+      }
+    });
+  }
+
+  getDrinks();
+
+  return {
+    get: getDrinks,
+    find: findDrink,
+    add: addDrink,
+    remove: removeDrink,
+    models: models
+  };
+}]);
 app.controller('navbarCtrl', ['$scope', function($scope) {
 
 }]);

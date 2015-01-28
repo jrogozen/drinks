@@ -16,6 +16,7 @@ app.controller('activityCtrl', ['$scope', '$state', '$stateParams', 'activityFac
 
     activityFactory.add(activity).$promise.then(function(data) {
       $state.go('activities.list');
+      $scope.activity = {};
     });
   };
 

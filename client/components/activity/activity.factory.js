@@ -11,7 +11,7 @@ app.factory('activityFactory', ['$resource', '$state', 'API_URL', function($reso
     activity: {}
   };
 
-  function drawActivity() {
+  function getActivities() {
     models.activities.length = 0;
     return activities.query(function(data) {
       _.each(data, function(curr, indx, arr) {
@@ -33,7 +33,7 @@ app.factory('activityFactory', ['$resource', '$state', 'API_URL', function($reso
     if(activity._id) {
       //need to update
       return activities.update(activity, function(data) {
-        drawActivity();
+        getActivities();
       });
     } else {
       //need to save
@@ -54,10 +54,10 @@ app.factory('activityFactory', ['$resource', '$state', 'API_URL', function($reso
     });
   }
 
-  drawActivity();
+  getActivities();
 
   return {
-    get: drawActivity,
+    get: getActivities,
     find: findActivity,
     add: addActivity,
     remove: removeActivity,

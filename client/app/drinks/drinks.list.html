@@ -1,0 +1,10 @@
+<ul class="list-unstyled">
+  <li class="panel" ng-repeat="drink in drinks">
+    <section>
+      <h2>{{drink.type}}
+      <a class="btn btn-xs btn-warning" ui-sref="drinks.edit({id: drink._id})">edit</a>
+      <a class="btn btn-xs btn-danger" ng-click="deleteDrink(drink._id)">delete</a>
+      </h2>
+    </section>
+  </li>
+</ul>
