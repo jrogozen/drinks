@@ -1,4 +1,4 @@
-app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', function($scope, activityFactory, drinkFactory) {
+app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', 'userFactory', 'playerFactory', function($scope, activityFactory, drinkFactory, userFactory, playerFactory) {
   
   $scope.game = {};
 
@@ -10,19 +10,6 @@ app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', functio
 
   $scope.playing = false;
   $scope.videoPlaying = false;
-
-  function getPlayers() {
-    return [
-      {
-        _id: 0,
-        name: "Jon"
-      },
-      {
-        _id: 1,
-        name: "Parag"
-      }
-    ];
-  }
 
   function getActivity() {
     activityFactory.get()
@@ -50,7 +37,7 @@ app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', functio
   $scope.play = function() {
     getActivity();
     getDrink();
-    $scope.game.players = getPlayers();
+    getUsers();
     $scope.playing = true;
   };
 

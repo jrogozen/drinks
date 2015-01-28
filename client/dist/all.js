@@ -126,7 +126,7 @@ app.config(['$stateProvider', function($stateProvider) {
     })
     ;
 }]);
-app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', function($scope, activityFactory, drinkFactory) {
+app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', 'userFactory', 'playerFactory', function($scope, activityFactory, drinkFactory, userFactory, playerFactory) {
   
   $scope.game = {};
 
@@ -138,19 +138,6 @@ app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', functio
 
   $scope.playing = false;
   $scope.videoPlaying = false;
-
-  function getPlayers() {
-    return [
-      {
-        _id: 0,
-        name: "Jon"
-      },
-      {
-        _id: 1,
-        name: "Parag"
-      }
-    ];
-  }
 
   function getActivity() {
     activityFactory.get()
@@ -178,7 +165,7 @@ app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', functio
   $scope.play = function() {
     getActivity();
     getDrink();
-    $scope.game.players = getPlayers();
+    getUsers();
     $scope.playing = true;
   };
 
@@ -191,7 +178,22 @@ app.config(['$stateProvider', function($stateProvider) {
       controller: 'gameCtrl'
     });
 }]);
-app.controller('mainCtrl', ['$scope', function($scope) {
+app.controller('mainCtrl', ['$scope', '$state', 'userFactory', 'playerFactory', function($scope, $state, userFactory, playerFactory) {
+  $scope.minimumPlayers = false;
+  $scope.notice = '';
+
+  $scope.players = playerFactory.models.players;
+
+  $scope.addPlayer = function(player) {
+    playerFactory.add(player);
+    $scope.player = {};
+  };
+
+  $scope.removePlayer = function(playerId) {
+    playerFactory.remove(playerId).then(function() {
+      $scope.players = playerFactory.models.players;
+    });
+  };
 
 }]);
 app.config(['$stateProvider', function($stateProvider) {
@@ -202,6 +204,61 @@ app.config(['$stateProvider', function($stateProvider) {
       controller: 'mainCtrl'
     });
 }]);
+app.directive('youtube', function($window) {
+  return {
+    restrict: "E",
+
+    scope: {
+      height: "@",
+      width: "@",
+      videoid: "@"
+    },
+
+    template: '<div></div>',
+
+    link: function(scope, element, attrs) {
+      var tag = document.createElement('script');
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      var player;
+
+      $window.onYouTubeIframeAPIReady = function() {
+        player = new YT.Player(element.children()[0], {
+
+          playerVars: {
+            autoplay: 0,
+            html5: 1,
+            theme: "light",
+            modestbranding: 1,
+            color: "white",
+            iv_load_policy: 3,
+            controls: 1
+          },
+
+          height: scope.height,
+          width: scope.width,
+          videoId: scope.videoid
+        });
+      };
+
+      scope.$watch('videoid', function(newValue, oldValue) {
+        if (newValue == oldValue) {
+          return;
+        }
+        player.cueVideoById(scope.videoid);
+      });
+
+      scope.$watch('height + width', function(newValue, oldValue) {
+        if (newValue == oldValue) {
+          return;
+        }
+        player.setSize(scope.width, scope.height);
+      });
+    }
+  };
+});
 app.factory('activityFactory', ['$resource', '$state', 'API_URL', function($resource, $state, API_URL) {
 
   var activities = $resource(API_URL + '/activities/:id', {id: '@_id'}, {
@@ -268,61 +325,6 @@ app.factory('activityFactory', ['$resource', '$state', 'API_URL', function($reso
     models: models
   };
 }]);
-app.directive('youtube', function($window) {
-  return {
-    restrict: "E",
-
-    scope: {
-      height: "@",
-      width: "@",
-      videoid: "@"
-    },
-
-    template: '<div></div>',
-
-    link: function(scope, element, attrs) {
-      var tag = document.createElement('script');
-      tag.src = "https://www.youtube.com/iframe_api";
-      var firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-      var player;
-
-      $window.onYouTubeIframeAPIReady = function() {
-        player = new YT.Player(element.children()[0], {
-
-          playerVars: {
-            autoplay: 0,
-            html5: 1,
-            theme: "light",
-            modestbranding: 1,
-            color: "white",
-            iv_load_policy: 3,
-            controls: 1
-          },
-
-          height: scope.height,
-          width: scope.width,
-          videoId: scope.videoid
-        });
-      };
-
-      scope.$watch('videoid', function(newValue, oldValue) {
-        if (newValue == oldValue) {
-          return;
-        }
-        player.cueVideoById(scope.videoid);
-      });
-
-      scope.$watch('height + width', function(newValue, oldValue) {
-        if (newValue == oldValue) {
-          return;
-        }
-        player.setSize(scope.width, scope.height);
-      });
-    }
-  };
-});
 app.factory('drinkFactory', ['$resource', '$state', 'API_URL', function($resource, $state, API_URL) {
   var drinks = $resource(API_URL + '/drinks/:id', {id: '@_id'}, {
     update: {
@@ -417,5 +419,74 @@ app.filter('decimalToWord', function() {
   };
 });
 app.controller('navbarCtrl', ['$scope', function($scope) {
+
+}]);
+app.factory('playerFactory', ['$q', '$resource', '$state', 'API_URL', function($q, $resource, $state, API_URL) {
+
+  var models = {
+    players: []
+  };
+
+  var count = 0;
+
+  function getPlayers() {
+    return models.players;
+  }
+
+  function addPlayer(player) {
+    player._id = count;
+    count ++;
+    return models.players.push(player);
+  }
+
+  function removePlayer(playerId) {
+    var deferred = $q.defer();
+
+    
+    /* enter remove player code here */
+
+    return deferred.promise;
+  }
+
+  return {
+    models: models,
+    get: getPlayers,
+    add: addPlayer,
+    remove: removePlayer
+  };
+
+}]);
+app.factory('userFactory', ['$resource', '$state', 'API_URL', function($resource, $state, API_URL) {
+
+  var models = {
+    users: []
+  };
+
+  // function getUsers() {
+  //   return models.users;
+  // }
+
+  // function addUser(user) {
+  //   user._id = models.user.length;
+  //   return models.users.push(user);
+  // }
+
+  // function removeUser(userId) {
+  //   for(var i=0; i < models.users.length; i++) {
+  //     if(models.users[i]._id == userId) {
+  //       models.users = models.users.splice(i, 1);
+  //       break;
+  //     }
+  //   }
+  // }
+
+  // getUsers();
+
+  return {
+    // models: models,
+    // get: getUsers,
+    // add: addUser,
+    // remove: removeUser
+  };
 
 }]);
