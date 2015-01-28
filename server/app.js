@@ -4,7 +4,7 @@ var express = require('express');
 var app = express();
 var path = require('path');
 var config = require('./config');
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 
 app.use(express.static(path.join(__dirname, '../client')));
 app.use(bodyParser.urlencoded({ extended: false }))

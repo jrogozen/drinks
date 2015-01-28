@@ -44,11 +44,11 @@ exports.destroy = function(req, res) {
     if(!activity) { return res.send(404); }
     activity.remove(function(err) {
       if(err) { return handleError(res, err); }
-      return res.send(204);
+      return res.sendStatus(204);
     });
   });
 };
 
 function handleError(res, err) {
-  return res.send(500, err);
+  return res.sendStatus(500, err);
 }

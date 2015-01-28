@@ -11,6 +11,72 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpP
 
   $locationProvider.html5Mode(true);
 }]);
+
+app.config(function($httpProvider) {
+  $httpProvider.defaults.headers.post  = {'Content-Type': 'application/x-www-form-urlencoded'};
+  $httpProvider.defaults.headers.put  = {'Content-Type': 'application/x-www-form-urlencoded'};
+  
+  $httpProvider.defaults.transformRequest = function(obj) {
+    if (obj) {
+      return $.param(obj, true);
+    }
+  };
+});
+app.controller('activitiesCtrl', ['$scope', '$stateParams', 'activityFactory', function($scope, $stateParams, activityFactory) {
+
+  $scope.deleteActivity = function(activityId) {
+    activityFactory.remove(activityId);
+  };
+
+  $scope.activities = activityFactory.models.activities;
+  
+}]);
+app.config(['$stateProvider', function($stateProvider) {
+  $stateProvider
+    .state('activities', {
+      url: '/activities',
+      abstract: true,
+      templateUrl: 'app/activities/activities.html',
+      controller: 'activitiesCtrl'
+    })
+    .state('activities.list', {
+      url: '',
+      templateUrl: 'app/activities/activities.list.html'
+    })
+    .state('activities.new', {
+      url: '/new',
+      templateUrl: 'app/activities/activities.new.html',
+      controller: 'activityCtrl'
+    })
+    .state('activities.edit', {
+      url: '/:id',
+      templateUrl: 'app/activities/activities.new.html',
+      controller: 'activityCtrl'
+    })
+    ;
+}]);
+app.controller('activityCtrl', ['$scope', '$state', '$stateParams', 'activityFactory', function($scope, $state, $stateParams, activityFactory) {
+
+  if($stateParams.id) {
+    activityFactory.find($stateParams.id);
+    $scope.activity = activityFactory.models.activity;
+  }
+
+  $scope.addActivity = function(activity) {
+    var sendActivity = activity;
+    if (activity.videos && !activity._id) {
+      activity.videos = activity.videos.split(",");
+      activity.videos = _.map(activity.videos, function(video) {
+        return $.trim(video);
+      });
+    }
+
+    activityFactory.add(activity).$promise.then(function(data) {
+      $state.go('activities.list');
+    });
+  };
+
+}]);
 app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', function($scope, activityFactory, drinkFactory) {
   
   $scope.game = {};
@@ -83,44 +149,70 @@ app.config(['$stateProvider', function($stateProvider) {
       controller: 'mainCtrl'
     });
 }]);
-app.factory('activityFactory', ['$resource', 'API_URL', function($resource, API_URL) {
+app.factory('activityFactory', ['$resource', '$state', 'API_URL', function($resource, $state, API_URL) {
 
-  var activities = $resource(API_URL + '/activities/:id', {}, {
+  var activities = $resource(API_URL + '/activities/:id', {id: '@_id'}, {
     update: {
       method: 'PUT'
     }
   });
 
+  var models = {
+    activities: [],
+    activity: {}
+  };
+
   function drawActivity() {
-    return activities.query();
+    models.activities.length = 0;
+    return activities.query(function(data) {
+      _.each(data, function(curr, indx, arr) {
+        models.activities.push(curr);
+      });
+    });
+  }
+
+  function findActivity(activityId) {
+    models.activity.length = 0;
+    return activities.get({id: activityId}, function(activity) {
+      _.each(activity, function(value, key) {
+        models.activity[key] = value;
+      });
+    });
   }
 
   function addActivity(activity) {
-    activities.push(activity);
+    if(activity._id) {
+      //need to update
+      return activities.update(activity, function(data) {
+        drawActivity();
+      });
+    } else {
+      //need to save
+      return activities.save(activity, function(data) {
+        models.activities.push(data);
+      });
+    }
   }
 
   function removeActivity(activityId) {
-    _.remove(activities, function(a) {
-      return a._id == activityId;
+    activities.delete({id: activityId}, function() {
+      for(var i=0; i < models.activities.length; i++) {
+        if(models.activities[i]._id == activityId) {
+          models.activities = models.activities.splice(i, 1);
+          break;
+        }
+      }
     });
   }
 
-  function editActivity(updatedActivity) {
-    var oldActivity = _.find(activities, function(a) {
-      return a._id == updatedActivity._id;
-    });
-
-    oldActivity.name = updatedActivity.name;
-    oldActivity.videos = updatedActivity.videos;
-    oldActivity.description = updatedActivity.description;
-    oldActivity.wikiLink = updatedActivity.wikiLink;
-  }
+  drawActivity();
 
   return {
     get: drawActivity,
+    find: findActivity,
     add: addActivity,
     remove: removeActivity,
-    edit: editActivity
+    models: models
   };
 }]);
 app.directive('youtube', function($window) {
@@ -231,9 +323,6 @@ app.factory('drinkFactory', [function() {
     edit: editDrink
   };
 }]);
-app.controller('navbarCtrl', ['$scope', function($scope) {
-
-}]);
 app.filter('decimalToWord', function() {
   return function(num) {
     // 0, 1, 1.5, 2
@@ -256,3 +345,6 @@ app.filter('decimalToWord', function() {
     }
   };
 });
+app.controller('navbarCtrl', ['$scope', function($scope) {
+
+}]);

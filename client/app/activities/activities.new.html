@@ -1,0 +1,26 @@
+<div class="row">
+  <div class="col-md-6">
+
+    <form ng-submit="addActivity(activity)">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" class="form-control" ng-model="activity.name"/>
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <input type="text" class="form-control" ng-model="activity.description"/>
+      </div>
+      <div class="form-group">
+        <label>Wikipedia Link</label>
+        <input type="text" class="form-control" ng-model="activity.wikiLink"/>
+      </div>
+      <div class="form-group">
+        <label>Youtube IDs <small>(separated by commas, eg: mgmVOuLgFB0, 26U_seo0a1g)</small></label>
+        <input class="form-control" type="text" ng-model="activity.videos"/>
+      </div>
+
+      <button class="btn btn-success" type="submit">Save</button>
+    </form>
+
+  </div>
+</div>

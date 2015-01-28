@@ -1,0 +1,11 @@
+<ul class="list-unstyled">
+  <li class="panel" ng-repeat="(id, activity) in activities">
+    <section>
+      <h2>{{activity.name}}
+      <a class="btn btn-xs btn-warning" ui-sref="activities.edit({id: activity._id})">edit</a>
+      <a class="btn btn-xs btn-danger" ng-click="deleteActivity(activity._id)">delete</a>
+      </h2>
+      <blockquote>{{activity.description}}</blockquote>
+    </section>
+  </li>
+</ul>

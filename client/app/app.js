@@ -11,3 +11,14 @@ app.config(['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpP
 
   $locationProvider.html5Mode(true);
 }]);
+
+app.config(function($httpProvider) {
+  $httpProvider.defaults.headers.post  = {'Content-Type': 'application/x-www-form-urlencoded'};
+  $httpProvider.defaults.headers.put  = {'Content-Type': 'application/x-www-form-urlencoded'};
+  
+  $httpProvider.defaults.transformRequest = function(obj) {
+    if (obj) {
+      return $.param(obj, true);
+    }
+  };
+});
