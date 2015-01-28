@@ -78,78 +78,6 @@ app.controller('activityCtrl', ['$scope', '$state', '$stateParams', 'activityFac
   };
 
 }]);
-app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', function($scope, activityFactory, drinkFactory) {
-  
-  $scope.game = {};
-  $scope.yt = {
-    width: '100%',
-    height: '100%',
-    videoid: ''
-  };
-
-  $scope.playing = false;
-  $scope.videoPlaying = false;
-
-  function getPlayers() {
-    return [
-      {
-        _id: 0,
-        name: "Jon"
-      },
-      {
-        _id: 1,
-        name: "Parag"
-      }
-    ];
-  }
-
-  function getActivity() {
-    activityFactory.get()
-      .$promise.then(function(activities) {
-        $scope.game.activity = activities[Math.floor(Math.random() * activities.length)];
-      });
-  }
-
-  function getDrink() {
-    return drinkFactory.get();
-  }
-
-  function setVideo(id) {
-    $scope.yt.videoid = id;
-  }
-
-  $scope.setVideo = function(id) {
-    setVideo(id);
-    $scope.videoPlaying = true;
-  };
-
-  $scope.play = function() {
-    getActivity();
-    $scope.game.drink = getDrink();
-    $scope.game.players = getPlayers();
-    $scope.playing = true;
-  };
-
-}]);
-app.config(['$stateProvider', function($stateProvider) {
-  $stateProvider
-    .state('game', {
-      url: '/game',
-      templateUrl: 'app/game/game.html',
-      controller: 'gameCtrl'
-    });
-}]);
-app.controller('mainCtrl', ['$scope', function($scope) {
-
-}]);
-app.config(['$stateProvider', function($stateProvider) {
-  $stateProvider
-    .state('main', {
-      url: '/',
-      templateUrl: 'app/main/main.html',
-      controller: 'mainCtrl'
-    });
-}]);
 app.controller('drinkCtrl', ['$scope', '$stateParams', '$state', 'drinkFactory', function($scope, $stateParams, $state, drinkFactory) {
 
   if($stateParams.id) {
@@ -197,6 +125,82 @@ app.config(['$stateProvider', function($stateProvider) {
       controller: 'drinkCtrl'
     })
     ;
+}]);
+app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', function($scope, activityFactory, drinkFactory) {
+  
+  $scope.game = {};
+
+  $scope.yt = {
+    width: '100%',
+    height: '100%',
+    videoid: ''
+  };
+
+  $scope.playing = false;
+  $scope.videoPlaying = false;
+
+  function getPlayers() {
+    return [
+      {
+        _id: 0,
+        name: "Jon"
+      },
+      {
+        _id: 1,
+        name: "Parag"
+      }
+    ];
+  }
+
+  function getActivity() {
+    activityFactory.get()
+      .$promise.then(function(activities) {
+        $scope.game.activity = activities[_.random(0, activities.length-1)];
+      });
+  }
+
+  function getDrink() {
+    drinkFactory.get()
+      .$promise.then(function(drinks) {
+        $scope.game.drink = drinks[_.random(0, drinks.length-1)];
+      });
+  }
+
+  function setVideo(id) {
+    $scope.yt.videoid = id;
+  }
+
+  $scope.setVideo = function(id) {
+    setVideo(id);
+    $scope.videoPlaying = true;
+  };
+
+  $scope.play = function() {
+    getActivity();
+    getDrink();
+    $scope.game.players = getPlayers();
+    $scope.playing = true;
+  };
+
+}]);
+app.config(['$stateProvider', function($stateProvider) {
+  $stateProvider
+    .state('game', {
+      url: '/game',
+      templateUrl: 'app/game/game.html',
+      controller: 'gameCtrl'
+    });
+}]);
+app.controller('mainCtrl', ['$scope', function($scope) {
+
+}]);
+app.config(['$stateProvider', function($stateProvider) {
+  $stateProvider
+    .state('main', {
+      url: '/',
+      templateUrl: 'app/main/main.html',
+      controller: 'mainCtrl'
+    });
 }]);
 app.factory('activityFactory', ['$resource', '$state', 'API_URL', function($resource, $state, API_URL) {
 
@@ -319,28 +323,6 @@ app.directive('youtube', function($window) {
     }
   };
 });
-app.filter('decimalToWord', function() {
-  return function(num) {
-    // 0, 1, 1.5, 2
-    var numArr = num.toString().split("");
-
-    if (numArr.length > 1) {
-      
-      // handle 0.5
-      if (numArr[0] === "0") {
-        return "half a";
-      }
-
-      // handle all other .5s
-      if (_.last(numArr) === "5") {
-        return numArr[0] + " and a half";
-      }
-
-    } else {
-      return numArr.join(" ");
-    }
-  };
-});
 app.factory('drinkFactory', ['$resource', '$state', 'API_URL', function($resource, $state, API_URL) {
   var drinks = $resource(API_URL + '/drinks/:id', {id: '@_id'}, {
     update: {
@@ -411,6 +393,29 @@ app.factory('drinkFactory', ['$resource', '$state', 'API_URL', function($resourc
     models: models
   };
 }]);
+app.filter('decimalToWord', function() {
+  return function(num) {
+    if (num) {
+      var numArr = num.toString().split("");
+
+      if (numArr.length > 1) {
+        
+        // handle 0.5
+        if (numArr[0] === "0") {
+          return "half a";
+        }
+
+        // handle all other .5s
+        if (_.last(numArr) === "5") {
+          return numArr[0] + " and a half";
+        }
+
+      } else {
+        return numArr.join(" ");
+      }
+    }
+  };
+});
 app.controller('navbarCtrl', ['$scope', function($scope) {
 
 }]);

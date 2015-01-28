@@ -1,6 +1,7 @@
 app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', function($scope, activityFactory, drinkFactory) {
   
   $scope.game = {};
+
   $scope.yt = {
     width: '100%',
     height: '100%',
@@ -26,12 +27,15 @@ app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', functio
   function getActivity() {
     activityFactory.get()
       .$promise.then(function(activities) {
-        $scope.game.activity = activities[Math.floor(Math.random() * activities.length)];
+        $scope.game.activity = activities[_.random(0, activities.length-1)];
       });
   }
 
   function getDrink() {
-    return drinkFactory.get();
+    drinkFactory.get()
+      .$promise.then(function(drinks) {
+        $scope.game.drink = drinks[_.random(0, drinks.length-1)];
+      });
   }
 
   function setVideo(id) {
@@ -45,7 +49,7 @@ app.controller('gameCtrl', ['$scope', 'activityFactory', 'drinkFactory', functio
 
   $scope.play = function() {
     getActivity();
-    $scope.game.drink = getDrink();
+    getDrink();
     $scope.game.players = getPlayers();
     $scope.playing = true;
   };
